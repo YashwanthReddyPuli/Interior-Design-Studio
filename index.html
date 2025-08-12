@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora Interiors | Design That Defines You</title>
+    <!-- Use a modern, elegant font pair from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2Ekq6n3wHwD6R+9/kP/Rk4Vf/GgD2RzQ6B7oQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* New dark, sophisticated palette with golden accents */
+        :root {
+            --background: #1A1A1A; /* Dark Charcoal */
+            --text-dark: #FFFFFF; /* White */
+            --text-light: #C7C7C7; /* Light Gray */
+            --primary: #333333; /* Dark Gray */
+            --accent: #EAB308; /* Golden Yellow */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--background);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--text-dark);
+        }
+
+        /* Hero Section Styling */
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2') center center/cover no-repeat;
+            min-height: 100vh;
+        }
+        
+        /* Portfolio Grid - Updated to a standard grid for no gaps */
+        .portfolio-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(1, 1fr);
+        }
+        @media (min-width: 640px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        /* Portfolio Card Styling */
+        .portfolio-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+            height: 300px; /* Enforced consistent height */
+        }
+
+        .portfolio-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .portfolio-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .portfolio-card .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(234, 179, 8, 0.6); /* Semi-transparent accent color */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .portfolio-card:hover .overlay {
+            opacity: 1;
+        }
+
+        /* Filter Controls */
+        .filter-container input[type="radio"] { display: none; }
+        .filter-container label {
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            color: var(--text-light);
+        }
+        .filter-container label:hover { color: var(--accent); }
+        .portfolio-item { display: block; }
+        
+        #filter-all:checked ~ .portfolio-grid .portfolio-item { display: block; }
+        #filter-residential:checked ~ .portfolio-grid .portfolio-item:not(.residential) { display: none; }
+        #filter-commercial:checked ~ .portfolio-grid .portfolio-item:not(.commercial) { display: none; }
+        #filter-renovation:checked ~ .portfolio-grid .portfolio-item:not(.renovation) { display: none; }
+        
+        /* Active filter button style */
+        #filter-all:checked ~ .filters .all-label,
+        #filter-residential:checked ~ .filters .residential-label,
+        #filter-commercial:checked ~ .filters .commercial-label,
+        #filter-renovation:checked ~ .filters .renovation-label {
+            background-color: var(--accent);
+            color: var(--text-dark);
+            border-color: var(--accent);
+        }
+
+        /* Testimonials Carousel */
+        .carousel-container { overflow: hidden; width: 100%; }
+        .carousel-track { display: flex; transition: transform 0.5s ease-in-out; }
+        .carousel-item { flex-shrink: 0; width: 100%; padding: 2rem; text-align: center; }
+        .carousel-navigation { display: flex; justify-content: center; margin-top: 1.5rem; }
+        .carousel-navigation input[type="radio"] { display: none; }
+        .carousel-navigation label {
+            cursor: pointer; display: block; width: 10px; height: 10px;
+            background-color: #6B7280; /* Gray-500 */
+            border-radius: 50%; margin: 0 0.5rem;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .carousel-navigation input[type="radio"]:checked + label { background-color: var(--accent); }
+        #testimonial-1:checked ~ .carousel-track { transform: translateX(0); }
+        #testimonial-2:checked ~ .carousel-track { transform: translateX(-100%); }
+        #testimonial-3:checked ~ .carousel-track { transform: translateX(-200%); }
+
+        /* Before/After Slider */
+        .before-after-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 500px;
+            margin: auto;
+            cursor: ew-resize;
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+
+        .before-after-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .before-after-container .after-image {
+            clip-path: inset(0 0 0 50%);
+        }
+
+        .before-after-container .slider-line {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            bottom: 0;
+            width: 2px;
+            background-color: var(--accent);
+            transform: translateX(-50%);
+        }
+        
+        .before-after-container .slider-handle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            background-color: var(--accent);
+            border: 2px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translate(-50%, -50%);
+        }
+
+        .before-after-container .slider-handle i {
+            color: white;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(100%);
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[var(--primary)] bg-opacity-95 backdrop-blur-sm p-4 md:px-12 shadow-md">
+        <nav class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-3xl font-bold tracking-wide text-[var(--accent)]">AURORA</a>
+            <ul class="hidden md:flex space-x-8 text-lg text-[var(--text-dark)]">
+                <li><a href="#home" class="hover:text-[var(--accent)] transition-colors">Home</a></li>
+                <li><a href="#services" class="hover:text-[var(--accent)] transition-colors">Services</a></li>
+                <li><a href="#portfolio" class="hover:text-[var(--accent)] transition-colors">Portfolio</a></li>
+                <li><a href="#before-after" class="hover:text-[var(--accent)] transition-colors">Before & After</a></li>
+                <li><a href="#testimonials" class="hover:text-[var(--accent)] transition-colors">Testimonials</a></li>
+                <li><a href="#contact" class="hover:text-[var(--accent)] transition-colors">Contact</a></li>
+            </ul>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-2xl text-[var(--text-dark)]">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Mobile Menu (off-canvas) -->
+    <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 h-full w-64 bg-[var(--primary)] shadow-lg p-8 z-50">
+        <button id="close-mobile-menu" class="absolute top-4 right-4 text-2xl text-[var(--text-light)]">
+            <i class="fas fa-times"></i>
+        </button>
+        <ul class="flex flex-col space-y-6 text-xl text-[var(--text-dark)]">
+            <li><a href="#home" class="hover:text-[var(--accent)] transition-colors">Home</a></li>
+            <li><a href="#services" class="hover:text-[var(--accent)] transition-colors">Services</a></li>
+            <li><a href="#portfolio" class="hover:text-[var(--accent)] transition-colors">Portfolio</a></li>
+            <li><a href="#before-after" class="hover:text-[var(--accent)] transition-colors">Before & After</a></li>
+            <li><a href="#testimonials" class="hover:text-[var(--accent)] transition-colors">Testimonials</a></li>
+            <li><a href="#contact" class="hover:text-[var(--accent)] transition-colors">Contact</a></li>
+        </ul>
+    </div>
+
+    <main>
+        <!-- Home Section with Hero Image -->
+        <section id="home" class="hero-section text-[var(--text-light)] flex flex-col justify-center items-center text-center p-8">
+            <div class="bg-black bg-opacity-50 p-8 rounded-xl shadow-lg">
+                <h1 class="text-5xl md:text-7xl font-bold leading-tight">Design That Defines You</h1>
+                <p class="mt-4 text-xl md:text-2xl font-light">Creating spaces where life happens beautifully.</p>
+                <a href="#portfolio" class="mt-8 inline-block px-8 py-3 bg-[var(--accent)] text-[var(--background)] font-semibold rounded-full shadow-lg hover:bg-opacity-90 transition-colors">View Portfolio</a>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="container mx-auto py-20 px-6">
+            <h2 class="text-4xl text-center font-bold mb-12">Our Services</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center p-8 bg-[var(--primary)] rounded-lg shadow-sm hover:shadow-lg transition-shadow">
+                    <i class="fas fa-home text-4xl text-[var(--accent)] mb-4"></i>
+                    <h3 class="text-2xl font-semibold mb-2">Residential Design</h3>
+                    <p class="text-[var(--text-light)]">From concept to completion, we craft personal sanctuaries that reflect your unique style.</p>
+                </div>
+                <div class="text-center p-8 bg-[var(--primary)] rounded-lg shadow-sm hover:shadow-lg transition-shadow">
+                    <i class="fas fa-building text-4xl text-[var(--accent)] mb-4"></i>
+                    <h3 class="text-2xl font-semibold mb-2">Commercial Design</h3>
+                    <p class="text-[var(--text-light)]">We design functional and inspiring commercial spaces that enhance your brand and productivity.</p>
+                </div>
+                <div class="text-center p-8 bg-[var(--primary)] rounded-lg shadow-sm hover:shadow-lg transition-shadow">
+                    <i class="fas fa-paint-roller text-4xl text-[var(--accent)] mb-4"></i>
+                    <h3 class="text-2xl font-semibold mb-2">Full Renovation</h3>
+                    <p class="text-[var(--text-light)]">Expert guidance and management for a seamless and stunning home renovation process.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section with Filters -->
+        <section id="portfolio" class="container mx-auto py-20 px-6 filter-container">
+            <h2 class="text-4xl text-center font-bold mb-8">Our Portfolio</h2>
+            <div class="filters flex justify-center flex-wrap gap-4 mb-12 text-sm font-semibold text-[var(--text-light)]">
+                <input type="radio" name="filter" id="filter-all" checked>
+                <label for="filter-all" class="all-label px-6 py-2 rounded-full border border-[var(--text-light)] hover:border-[var(--accent)]">All</label>
+                
+                <input type="radio" name="filter" id="filter-residential">
+                <label for="filter-residential" class="residential-label px-6 py-2 rounded-full border border-[var(--text-light)] hover:border-[var(--accent)]">Residential</label>
+                
+                <input type="radio" name="filter" id="filter-commercial">
+                <label for="filter-commercial" class="commercial-label px-6 py-2 rounded-full border border-[var(--text-light)] hover:border-[var(--accent)]">Commercial</label>
+                
+                <input type="radio" name="filter" id="filter-renovation">
+                <label for="filter-renovation" class="renovation-label px-6 py-2 rounded-full border border-[var(--text-light)] hover:border-[var(--accent)]">Renovation</label>
+            </div>
+            
+            <div class="portfolio-grid">
+                <div class="portfolio-item residential renovation">
+                    <div class="portfolio-card">
+                        <img src="https://images.pexels.com/photos/1776574/pexels-photo-1776574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Minimalist living room">
+                        <div class="overlay text-[var(--text-dark)]">
+                            <span class="text-2xl font-bold">Minimalist Haven</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item commercial">
+                    <div class="portfolio-card">
+                        <img src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Modern office space">
+                        <div class="overlay text-[var(--text-dark)]">
+                            <span class="text-2xl font-bold">Modern Office</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item residential">
+                    <div class="portfolio-card">
+                        <img src="https://images.pexels.com/photos/631411/pexels-photo-631411.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Cozy bedroom with large window">
+                        <div class="overlay text-[var(--text-dark)]">
+                            <span class="text-2xl font-bold">Urban Retreat</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item commercial renovation">
+                    <div class="portfolio-card">
+                        <img src="https://images.pexels.com/photos/2082087/pexels-photo-2082087.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Stylish cafe interior">
+                        <div class="overlay text-[var(--text-dark)]">
+                            <span class="text-2xl font-bold">Café Renovation</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item residential">
+                    <div class="portfolio-card">
+                        <img src="https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Contemporary kitchen design">
+                        <div class="overlay text-[var(--text-dark)]">
+                            <span class="text-2xl font-bold">Chef's Kitchen</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item commercial renovation">
+                    <div class="portfolio-card">
+                        <img src="https://images.pexels.com/photos/2988232/pexels-photo-2988232.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Boutique shop interior">
+                        <div class="overlay text-[var(--text-dark)]">
+                            <span class="text-2xl font-bold">Retail Space</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- New Before & After Section -->
+        <section id="before-after" class="bg-[var(--primary)] py-20 px-6">
+            <h2 class="text-4xl text-center font-bold mb-12">See the Transformation</h2>
+            <div class="before-after-container">
+                <img src="https://images.pexels.com/photos/2251247/pexels-photo-2251247.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Before" class="before-image">
+                <img src="https://images.pexels.com/photos/2251249/pexels-photo-2251249.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="After" class="after-image">
+                <div class="slider-line"></div>
+                <div class="slider-handle">
+                    <i class="fas fa-arrows-alt-h"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section with CSS-only Carousel -->
+        <section id="testimonials" class="py-20 px-6">
+            <h2 class="text-4xl text-center font-bold mb-12">Client Testimonials</h2>
+            <div class="container mx-auto bg-[var(--primary)] text-[var(--text-light)] p-8 rounded-lg shadow-lg">
+                <div class="carousel-container">
+                    <div class="hidden">
+                        <input type="radio" name="testimonial-nav" id="testimonial-1" checked>
+                        <input type="radio" name="testimonial-nav" id="testimonial-2">
+                        <input type="radio" name="testimonial-3">
+                    </div>
+                    <div class="carousel-track">
+                        <div class="carousel-item">
+                            <blockquote class="text-xl italic font-light">"Aurora Interiors completely transformed our home. They listened to our needs and delivered a design that was both beautiful and functional. Highly recommend!"</blockquote>
+                            <p class="mt-4 text-sm font-semibold text-[var(--accent)]">- Sarah J.</p>
+                        </div>
+                        <div class="carousel-item">
+                            <blockquote class="text-xl italic font-light">"Working with them on our new office space was a dream. The process was smooth and the final result perfectly captures our brand's modern aesthetic."</blockquote>
+                            <p class="mt-4 text-sm font-semibold text-[var(--accent)]">- Mark T., CEO</p>
+                        </div>
+                        <div class="carousel-item">
+                            <blockquote class="text-xl italic font-light">"The renovation of our kitchen and living area exceeded all expectations. They handled every detail with professionalism and a fantastic eye for design."</blockquote>
+                            <p class="mt-4 text-sm font-semibold text-[var(--accent)]">- Emily R.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-navigation">
+                    <label for="testimonial-1"></label>
+                    <label for="testimonial-2"></label>
+                    <label for="testimonial-3"></label>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="container mx-auto py-20 px-6">
+            <h2 class="text-4xl text-center font-bold mb-8">Contact Us</h2>
+            <p class="text-center text-lg max-w-2xl mx-auto mb-8 text-[var(--text-light)]">Ready to start your design journey? Get in touch with us to schedule a consultation.</p>
+            <form id="contact-form" class="max-w-xl mx-auto space-y-6">
+                <div>
+                    <label for="name" class="block text-sm font-medium text-[var(--text-light)]">Name</label>
+                    <input type="text" id="name" name="name" class="mt-1 block w-full px-4 py-2 border border-[var(--primary)] rounded-md shadow-sm bg-[var(--primary)] text-[var(--text-dark)] focus:ring-[var(--accent)] focus:border-[var(--accent)]">
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium text-[var(--text-light)]">Email</label>
+                    <input type="email" id="email" name="email" class="mt-1 block w-full px-4 py-2 border border-[var(--primary)] rounded-md shadow-sm bg-[var(--primary)] text-[var(--text-dark)] focus:ring-[var(--accent)] focus:border-[var(--accent)]">
+                </div>
+                <div>
+                    <label for="message" class="block text-sm font-medium text-[var(--text-light)]">Message</label>
+                    <textarea id="message" name="message" rows="4" class="mt-1 block w-full px-4 py-2 border border-[var(--primary)] rounded-md shadow-sm bg-[var(--primary)] text-[var(--text-dark)] focus:ring-[var(--accent)] focus:border-[var(--accent)]"></textarea>
+                </div>
+                <div id="form-message" class="text-center text-sm font-semibold text-[var(--accent)] hidden"></div>
+                <div class="text-center">
+                    <button type="submit" class="w-full md:w-auto px-8 py-3 bg-[var(--accent)] text-[var(--background)] font-semibold rounded-full shadow-lg hover:bg-opacity-90 transition-colors">Send Message</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[var(--primary)] text-[var(--text-light)] py-12 px-6">
+        <div class="container mx-auto text-center">
+            <p class="text-lg font-bold mb-4 text-[var(--accent)]">AURORA</p>
+            <div class="flex justify-center space-x-6 text-xl mb-4">
+                <a href="#" class="hover:text-[var(--accent)] transition-colors"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="hover:text-[var(--accent)] transition-colors"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="hover:text-[var(--accent)] transition-colors"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <p class="text-sm text-gray-400">&copy; 2024 Aurora Interiors. All Rights Reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Mobile Menu Logic ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const closeMenuButton = document.getElementById('close-mobile-menu');
+            const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.add('open');
+            });
+
+            closeMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+            });
+
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('open');
+                });
+            });
+
+            // --- Smooth Scroll Logic ---
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // --- Before/After Slider Logic ---
+            const sliderContainer = document.querySelector('.before-after-container');
+            const afterImage = document.querySelector('.after-image');
+            const sliderLine = document.querySelector('.slider-line');
+            let isDragging = false;
+
+            if (sliderContainer) {
+                sliderContainer.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    isDragging = true;
+                });
+                
+                sliderContainer.addEventListener('mouseup', () => {
+                    isDragging = false;
+                });
+                
+                sliderContainer.addEventListener('mouseleave', () => {
+                    isDragging = false;
+                });
+
+                sliderContainer.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    let rect = sliderContainer.getBoundingClientRect();
+                    let x = e.clientX - rect.left;
+                    let percentage = (x / rect.width) * 100;
+                    if (percentage < 0) percentage = 0;
+                    if (percentage > 100) percentage = 100;
+
+                    afterImage.style.clipPath = `inset(0 0 0 ${percentage}%)`;
+                    sliderLine.style.left = `${percentage}%`;
+                });
+                
+                // Add touch events for mobile
+                sliderContainer.addEventListener('touchstart', (e) => {
+                    isDragging = true;
+                });
+
+                sliderContainer.addEventListener('touchend', () => {
+                    isDragging = false;
+                });
+
+                sliderContainer.addEventListener('touchmove', (e) => {
+                    if (!isDragging) return;
+                    e.preventDefault();
+                    let rect = sliderContainer.getBoundingClientRect();
+                    let x = e.touches[0].clientX - rect.left;
+                    let percentage = (x / rect.width) * 100;
+                    if (percentage < 0) percentage = 0;
+                    if (percentage > 100) percentage = 100;
+                    
+                    afterImage.style.clipPath = `inset(0 0 0 ${percentage}%)`;
+                    sliderLine.style.left = `${percentage}%`;
+                });
+            }
+
+            // --- Contact Form Logic (basic validation) ---
+            const contactForm = document.getElementById('contact-form');
+            const formMessage = document.getElementById('form-message');
+
+            if (contactForm) {
+                contactForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    const name = document.getElementById('name').value;
+                    const email = document.getElementById('email').value;
+                    const message = document.getElementById('message').value;
+
+                    if (!name || !email || !message) {
+                        formMessage.textContent = 'Please fill out all fields.';
+                        formMessage.classList.remove('hidden');
+                        return;
+                    }
+                    
+                    formMessage.textContent = 'Thank you for your message! We will be in touch shortly.';
+                    formMessage.classList.remove('hidden');
+                    contactForm.reset();
+                });
+            }
+        });
+    </script>
+    
+</body>
+</html>
